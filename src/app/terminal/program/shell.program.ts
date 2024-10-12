@@ -43,7 +43,6 @@ export class ShellProgram extends Program {
         break;
       // ENTER
       case '\r':
-        // TODO execute command
         TerminalHelper.println(this.terminal);
         const separatorIdx: number = this.buffer.indexOf(' ');
         const command: string = separatorIdx > 0 ? this.buffer.substring(0, separatorIdx) : this.buffer;
