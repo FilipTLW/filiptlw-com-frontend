@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {FunctionsUsingCSI} from 'ng-terminal';
 import {foreColor256, RESET} from '../utils/color';
 
 @Injectable({
