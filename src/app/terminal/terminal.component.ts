@@ -5,6 +5,7 @@ import {Program} from './program/program';
 import {ShellProgram} from './program/shell.program';
 import {Observable, Subject} from 'rxjs';
 import {TerminalHelper} from '../utils/terminal';
+import {AppService} from '../app.service';
 
 @Component({
   selector: 'app-terminal',
@@ -22,16 +23,16 @@ export class TerminalComponent implements AfterViewInit {
   private programExited: Subject<void> = new Subject<void>();
   private programExited$: Observable<void> = this.programExited.asObservable();
 
-  constructor(private _terminalService: TerminalService) {
+  constructor(private _terminalService: TerminalService, private _appService: AppService) {
   }
 
   ngAfterViewInit(): void {
     TerminalHelper.println(this.terminal, this._terminalService.getMOTD());
 
-    this.currentProgram = new ShellProgram(this.terminal, this.programExited, this._terminalService);
+    this.currentProgram = new ShellProgram(this.terminal, this.programExited, this._terminalService, this._appService);
     this.programExited$.subscribe(() => {
       this.currentProgram?.kill();
-      this.currentProgram = new ShellProgram(this.terminal, this.programExited, this._terminalService);
+      this.currentProgram = new ShellProgram(this.terminal, this.programExited, this._terminalService, this._appService);
     });
 
     this.terminal.onData().subscribe((input: string) => {

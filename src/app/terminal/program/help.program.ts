@@ -3,6 +3,7 @@ import {TerminalHelper} from '../../utils/terminal';
 import {foreColor256, RESET} from '../../utils/color';
 import {NgTerminal} from 'ng-terminal';
 import {EchoProgram} from './echo.program';
+import {EzModeProgram} from './ezmode.program';
 
 export class HelpProgram extends Program {
   protected override initialize(): void {
@@ -11,6 +12,7 @@ export class HelpProgram extends Program {
       TerminalHelper.println(this.terminal, `${foreColor256(33)}Available commands:`);
       TerminalHelper.println(this.terminal, `${foreColor256(14)}help      ${RESET}Prints this help message`);
       TerminalHelper.println(this.terminal, `${foreColor256(14)}echo      ${RESET}Echoes back the provided text`);
+      TerminalHelper.println(this.terminal, `${foreColor256(14)}ezmode    ${RESET}Enables UI controls for the website`);
       TerminalHelper.println(this.terminal);
       TerminalHelper.println(this.terminal, `Use help COMMAND to get additional help specific for COMMAND.`)
       TerminalHelper.println(this.terminal);
@@ -22,6 +24,9 @@ export class HelpProgram extends Program {
         case 'echo':
           EchoProgram.printHelpMessage(this.terminal);
           break;
+        case 'ezmode':
+          EzModeProgram.printHelpMessage(this.terminal);
+          break;
       }
     }
     this.exit();
@@ -29,7 +34,7 @@ export class HelpProgram extends Program {
 
   override onData(_: string): void {}
 
-  static printHelpMessage(terminal: NgTerminal) {
+  static printHelpMessage(terminal: NgTerminal): void {
     TerminalHelper.println(terminal);
     TerminalHelper.println(terminal, `Syntax: help [COMMAND]`);
     TerminalHelper.println(terminal);

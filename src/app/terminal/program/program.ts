@@ -1,9 +1,10 @@
 import {NgTerminal} from 'ng-terminal';
 import {Subject} from 'rxjs';
 import {TerminalService} from '../terminal.service';
+import {AppService} from '../../app.service';
 
 export abstract class Program {
-  constructor(protected terminal: NgTerminal, protected _exit: Subject<void>, protected _terminalService: TerminalService, protected args: string = '') {
+  constructor(protected terminal: NgTerminal, protected _exit: Subject<void>, protected _terminalService: TerminalService, protected _appService: AppService, protected args: string = '') {
     this.initialize();
   }
 
