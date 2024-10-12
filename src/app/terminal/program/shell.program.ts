@@ -2,6 +2,8 @@ import {Program} from './program';
 import {FunctionsUsingCSI} from 'ng-terminal';
 import {firstValueFrom, Observable, Subject} from 'rxjs';
 import {EchoProgram} from './echo.program';
+import {TerminalHelper} from '../../utils/terminal';
+import {HelpProgram} from './help.program';
 
 export class ShellProgram extends Program {
   buffer: string = '';
@@ -10,7 +12,6 @@ export class ShellProgram extends Program {
   subProgram?: Program;
 
   override initialize(): void {
-    this.terminal.write('\n');
     this.terminal.write(this._terminalService.getPrefix());
   }
 
@@ -42,8 +43,7 @@ export class ShellProgram extends Program {
       // ENTER
       case '\r':
         // TODO execute command
-        this.terminal.write('\n');
-        this.terminal.write(FunctionsUsingCSI.cursorColumn(1));
+        TerminalHelper.println(this.terminal);
         const separatorIdx: number = this.buffer.indexOf(' ');
         const command: string = separatorIdx > 0 ? this.buffer.substring(0, separatorIdx) : this.buffer;
         const args: string = separatorIdx > 0 ? this.buffer.substring(separatorIdx + 1) : '';
@@ -86,9 +86,13 @@ export class ShellProgram extends Program {
     switch (program) {
       case 'echo':
         this.subProgram = new EchoProgram(this.terminal, subExit, this._terminalService, args);
-        await subExitPromise;
+        break;
+      case 'help':
+        this.subProgram = new HelpProgram(this.terminal, subExit, this._terminalService, args);
         break;
     }
+    await subExitPromise;
+    this.subProgram = undefined;
   }
 
 }

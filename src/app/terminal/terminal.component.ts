@@ -4,6 +4,7 @@ import {TerminalService} from './terminal.service';
 import {Program} from './program/program';
 import {ShellProgram} from './program/shell.program';
 import {Observable, Subject} from 'rxjs';
+import {TerminalHelper} from '../utils/terminal';
 
 @Component({
   selector: 'app-terminal',
@@ -25,7 +26,7 @@ export class TerminalComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.terminal.write(this._terminalService.getMOTD());
+    TerminalHelper.println(this.terminal, this._terminalService.getMOTD());
 
     this.currentProgram = new ShellProgram(this.terminal, this.programExited, this._terminalService);
     this.programExited$.subscribe(() => {
