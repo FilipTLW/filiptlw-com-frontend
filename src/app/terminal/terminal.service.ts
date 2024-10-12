@@ -9,11 +9,11 @@ export class TerminalService {
   constructor() { }
 
   getPrefix(): string {
-    return `${foreColor256(46)}root${RESET}@${foreColor256(46)}filiptlw.com \x1b[0min ${foreColor256(165)}/ \x1b[0m$ `;
+    return `${foreColor256(46)}anonymous${RESET}@${foreColor256(46)}filiptlw.com \x1b[0min ${foreColor256(165)}/ \x1b[0m$ `;
   }
 
   getRawPrefix(): string {
-    return `root@filiptlw.com in / $ `;
+    return `anonymous@filiptlw.com in / $ `;
   }
 
   getMOTD(): string {

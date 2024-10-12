@@ -1,0 +1,10 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 16px);
+  font-family: courier-new, courier, monospace;
+
+  .content {
+    height: 100%;
+  }
+}

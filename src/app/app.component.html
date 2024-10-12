@@ -1,9 +1,11 @@
-@if (ezMode) {
-  SHAMEFUL-Mode
-  <!-- TODO Layout -->
-  <router-outlet></router-outlet>
-} @else {
-  NOT-SO-SHAMEFUL-Mode
-  <router-outlet></router-outlet>
-}
-<app-terminal></app-terminal>
+<div class="main-container">
+  <div class="content">
+    @if (ezMode) {
+        <!-- TODO Layout -->
+      <router-outlet></router-outlet>
+    } @else {
+      <router-outlet></router-outlet>
+    }
+  </div>
+  <app-terminal class="terminal"></app-terminal>
+</div>
