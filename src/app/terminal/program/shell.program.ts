@@ -5,6 +5,7 @@ import {EchoProgram} from './echo.program';
 import {TerminalHelper} from '../../utils/terminal';
 import {HelpProgram} from './help.program';
 import {EzModeProgram} from './ezmode.program';
+import {LoginProgram} from './login.program';
 
 export class ShellProgram extends Program {
   buffer: string = '';
@@ -85,13 +86,16 @@ export class ShellProgram extends Program {
     const subExitPromise: Promise<void> = firstValueFrom(subExit$);
     switch (program) {
       case 'echo':
-        this.subProgram = new EchoProgram(this.terminal, subExit, this._terminalService, this._appService, args);
+        this.subProgram = new EchoProgram(this.terminal, subExit, this._terminalService, this._appService, this._loginService, args);
         break;
       case 'help':
-        this.subProgram = new HelpProgram(this.terminal, subExit, this._terminalService, this._appService, args);
+        this.subProgram = new HelpProgram(this.terminal, subExit, this._terminalService, this._appService, this._loginService, args);
         break;
       case 'ezmode':
-        this.subProgram = new EzModeProgram(this.terminal, subExit, this._terminalService, this._appService, args);
+        this.subProgram = new EzModeProgram(this.terminal, subExit, this._terminalService, this._appService, this._loginService, args);
+        break;
+      case 'login':
+        this.subProgram = new LoginProgram(this.terminal, subExit, this._terminalService, this._appService, this._loginService, args);
         break;
     }
     await subExitPromise;
