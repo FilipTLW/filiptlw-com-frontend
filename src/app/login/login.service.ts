@@ -1,21 +1,25 @@
 import { Injectable } from '@angular/core';
-import axios from 'axios';
 import {environment} from '../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {firstValueFrom} from 'rxjs';
+import {ClientIdResponse} from '../utils/models/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   async loginWithGithub(): Promise<void> {
-    const clientID = await axios.get<string>(`${environment.apiUrl}/login/github/clientID`);
-    window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientID.data}`;
+    const clientID = await firstValueFrom(this.http.get<ClientIdResponse>(`${environment.apiUrl}/auth/github/clientID`));
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientID.clientId}`;
   }
 
   async submitGithubCode(code: string): Promise<void> {
-    await axios.post(`${environment.apiUrl}/login/github/login`, {
+    await firstValueFrom(this.http.post(`${environment.apiUrl}/auth/github/login`, {
       code: code
-    });
+    }, {
+      withCredentials: true
+    }));
   }
 }
