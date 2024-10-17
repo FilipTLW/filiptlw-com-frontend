@@ -4,15 +4,17 @@ import {foreColor256, RESET} from '../../utils/color';
 import {NgTerminal} from 'ng-terminal';
 import {EchoProgram} from './echo.program';
 import {EzModeProgram} from './ezmode.program';
+import {LoginProgram} from './login.program';
 
 export class HelpProgram extends Program {
-  protected override initialize(): void {
+  public override initialize(): void {
     if (this.args.trim().length === 0) {
       TerminalHelper.println(this.terminal);
       TerminalHelper.println(this.terminal, `${foreColor256(33)}Available commands:`);
       TerminalHelper.println(this.terminal, `${foreColor256(14)}help      ${RESET}Prints this help message`);
       TerminalHelper.println(this.terminal, `${foreColor256(14)}echo      ${RESET}Echoes back the provided text`);
       TerminalHelper.println(this.terminal, `${foreColor256(14)}ezmode    ${RESET}Enables UI controls for the website`);
+      TerminalHelper.println(this.terminal, `${foreColor256(14)}login     ${RESET}Logs you in using your chosen login method`);
       TerminalHelper.println(this.terminal);
       TerminalHelper.println(this.terminal, `Use help COMMAND to get additional help specific for COMMAND.`)
       TerminalHelper.println(this.terminal);
@@ -26,6 +28,9 @@ export class HelpProgram extends Program {
           break;
         case 'ezmode':
           EzModeProgram.printHelpMessage(this.terminal);
+          break;
+        case 'login':
+          LoginProgram.printHelpMessage(this.terminal);
           break;
       }
     }

@@ -6,14 +6,17 @@ import {TerminalHelper} from '../../utils/terminal';
 import {HelpProgram} from './help.program';
 import {EzModeProgram} from './ezmode.program';
 import {LoginProgram} from './login.program';
+import {TerminalService} from '../terminal.service';
 
 export class ShellProgram extends Program {
+  readonly _terminalService: TerminalService = this._programServiceInjector.inject(TerminalService);
+
   buffer: string = '';
   bufferPtr: number = 0;
 
   subProgram?: Program;
 
-  override initialize(): void {
+  public override initialize(): void {
     this.terminal.write(this._terminalService.getPrefix());
   }
 
@@ -86,16 +89,23 @@ export class ShellProgram extends Program {
     const subExitPromise: Promise<void> = firstValueFrom(subExit$);
     switch (program) {
       case 'echo':
-        this.subProgram = new EchoProgram(this.terminal, subExit, this._terminalService, this._appService, this._loginService, args);
+        this.subProgram = new EchoProgram(this.terminal, subExit, this._programServiceInjector, args);
+        this.subProgram.initialize();
         break;
       case 'help':
-        this.subProgram = new HelpProgram(this.terminal, subExit, this._terminalService, this._appService, this._loginService, args);
+        this.subProgram = new HelpProgram(this.terminal, subExit, this._programServiceInjector, args);
+        this.subProgram.initialize();
         break;
       case 'ezmode':
-        this.subProgram = new EzModeProgram(this.terminal, subExit, this._terminalService, this._appService, this._loginService, args);
+        this.subProgram = new EzModeProgram(this.terminal, subExit, this._programServiceInjector, args);
+        this.subProgram.initialize();
         break;
       case 'login':
-        this.subProgram = new LoginProgram(this.terminal, subExit, this._terminalService, this._appService, this._loginService, args);
+        this.subProgram = new LoginProgram(this.terminal, subExit, this._programServiceInjector, args);
+        this.subProgram.initialize();
+        break;
+      default:
+        subExit.next();
         break;
     }
     await subExitPromise;

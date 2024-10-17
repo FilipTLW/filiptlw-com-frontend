@@ -1,9 +1,12 @@
 import {Program} from './program';
 import {NgTerminal} from 'ng-terminal';
 import {TerminalHelper} from '../../utils/terminal';
+import {AppService} from '../../app.service';
 
 export class EzModeProgram extends Program {
-  override initialize(): void {
+  readonly _appService = this._programServiceInjector.inject(AppService);
+
+  public override initialize(): void {
     const args: string[] = this.args.split(' ').filter(arg => arg !== '');
     if (args.length === 0) {
       EzModeProgram.printHelpMessage(this.terminal);

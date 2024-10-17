@@ -1,17 +1,14 @@
 import {NgTerminal} from 'ng-terminal';
 import {Subject} from 'rxjs';
-import {TerminalService} from '../terminal.service';
-import {AppService} from '../../app.service';
-import {LoginService} from '../../login/login.service';
+import {ProgramServiceInjector} from './program-service-injector';
 
 export abstract class Program {
-  constructor(protected terminal: NgTerminal, protected _exit: Subject<void>, protected _terminalService: TerminalService, protected _appService: AppService, protected _loginService: LoginService, protected args: string = '') {
-    this.initialize();
+  constructor(protected terminal: NgTerminal, protected _exit: Subject<void>, protected _programServiceInjector: ProgramServiceInjector, protected args: string = '') {
   }
 
   abstract onData(input: string): void;
 
-  protected initialize(): void {}
+  public initialize(): void {}
 
   protected exit(): void {
     this._exit.next();
