@@ -10,6 +10,8 @@ export abstract class Program {
 
   public initialize(): void {}
 
+  public onAuthError(): void { }
+
   protected exit(): void {
     this._exit.next();
   }

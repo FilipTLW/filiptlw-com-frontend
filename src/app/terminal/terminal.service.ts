@@ -5,7 +5,6 @@ import {foreColor256, RESET} from '../utils/color';
   providedIn: 'root'
 })
 export class TerminalService {
-
   constructor() { }
 
   getPrefix(): string {

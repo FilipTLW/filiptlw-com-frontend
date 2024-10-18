@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {firstValueFrom} from 'rxjs';
-import {ClientIdResponse} from '../utils/models/auth';
+import {ClientIdResponse, UserProfile} from '../utils/models/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +19,12 @@ export class LoginService {
     await firstValueFrom(this.http.post(`${environment.apiUrl}/auth/github/login`, {
       code: code
     }, {
+      withCredentials: true
+    }));
+  }
+
+  async getProfile(): Promise<UserProfile> {
+    return await firstValueFrom(this.http.get<UserProfile>(`${environment.apiUrl}/auth/profile`, {
       withCredentials: true
     }));
   }

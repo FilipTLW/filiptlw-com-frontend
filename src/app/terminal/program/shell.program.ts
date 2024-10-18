@@ -7,6 +7,7 @@ import {HelpProgram} from './help.program';
 import {EzModeProgram} from './ezmode.program';
 import {LoginProgram} from './login.program';
 import {TerminalService} from '../terminal.service';
+import {ProfileProgram} from './profile.program';
 
 export class ShellProgram extends Program {
   readonly _terminalService: TerminalService = this._programServiceInjector.inject(TerminalService);
@@ -102,6 +103,10 @@ export class ShellProgram extends Program {
         break;
       case 'login':
         this.subProgram = new LoginProgram(this.terminal, subExit, this._programServiceInjector, args);
+        this.subProgram.initialize();
+        break;
+      case 'profile':
+        this.subProgram = new ProfileProgram(this.terminal, subExit, this._programServiceInjector, args);
         this.subProgram.initialize();
         break;
       default:
