@@ -8,6 +8,7 @@ import {EzModeProgram} from './ezmode.program';
 import {LoginProgram} from './login.program';
 import {TerminalService} from '../terminal.service';
 import {ProfileProgram} from './profile.program';
+import {LogoutProgram} from './logout.program';
 
 export class ShellProgram extends Program {
   readonly _terminalService: TerminalService = this._programServiceInjector.inject(TerminalService);
@@ -91,28 +92,27 @@ export class ShellProgram extends Program {
     switch (program) {
       case 'echo':
         this.subProgram = new EchoProgram(this.terminal, subExit, this._programServiceInjector, args);
-        this.subProgram.initialize();
         break;
       case 'help':
         this.subProgram = new HelpProgram(this.terminal, subExit, this._programServiceInjector, args);
-        this.subProgram.initialize();
         break;
       case 'ezmode':
         this.subProgram = new EzModeProgram(this.terminal, subExit, this._programServiceInjector, args);
-        this.subProgram.initialize();
         break;
       case 'login':
         this.subProgram = new LoginProgram(this.terminal, subExit, this._programServiceInjector, args);
-        this.subProgram.initialize();
         break;
       case 'profile':
         this.subProgram = new ProfileProgram(this.terminal, subExit, this._programServiceInjector, args);
-        this.subProgram.initialize();
+        break;
+      case 'logout':
+        this.subProgram = new LogoutProgram(this.terminal, subExit, this._programServiceInjector, args);
         break;
       default:
         subExit.next();
         break;
     }
+    this.subProgram?.initialize();
     await subExitPromise;
     this.subProgram = undefined;
   }

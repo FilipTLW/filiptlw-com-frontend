@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {LoginService} from '../login.service';
 
 @Component({
@@ -14,6 +14,7 @@ export class GithubLoginComponent {
     this._activatedRoute.queryParams.subscribe(async (queryParams: Params) => {
       if (queryParams['code']) {
         await this._loginService.submitGithubCode(queryParams['code']);
+        window.location.href = `${window.location.protocol}://${window.location.host}/`;
       }
     });
   }

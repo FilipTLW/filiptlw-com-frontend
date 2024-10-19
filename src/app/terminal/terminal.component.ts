@@ -35,7 +35,8 @@ export class TerminalComponent implements AfterViewInit {
   constructor(private _terminalService: TerminalService, private _appService: AppService, private _loginService: LoginService, private _programServiceInjector: ProgramServiceInjector) {
   }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit(): Promise<void> {
+    await this._loginService.updateProfile();
     TerminalHelper.println(this.terminal, this._terminalService.getMOTD());
 
     this.currentProgram = new ShellProgram(this.terminal, this.programExited, this._programServiceInjector);
