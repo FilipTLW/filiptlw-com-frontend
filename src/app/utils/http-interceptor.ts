@@ -3,16 +3,14 @@ import {
   HttpContext,
   HttpContextToken,
   HttpEvent,
-  HttpEventType,
   HttpHandler,
   HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
-import {catchError, firstValueFrom, Observable, switchMap, tap} from 'rxjs';
+import {catchError, Observable, switchMap, tap} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {TerminalService} from '../terminal/terminal.service';
-import {TerminalHelper} from './terminal';
 
 export const INTERCEPT_UNAUTHORIZED = new HttpContextToken<boolean>(() => true);
 

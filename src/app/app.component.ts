@@ -2,14 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {AppService} from './app.service';
 import {TerminalComponent} from './terminal/terminal.component';
-import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import {UnauthorizedInterceptor} from './utils/http-interceptor';
+import {PageFileSystemService} from './page-file-system/page-file-system.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, TerminalComponent],
-  providers: [AppService],
+  providers: [AppService, PageFileSystemService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -17,7 +16,7 @@ export class AppComponent implements OnInit {
 
   ezMode: boolean = false;
 
-  constructor(private _appService: AppService) {
+  constructor(private _appService: AppService, private _pageFileSystemService: PageFileSystemService) {
   }
 
   ngOnInit(): void {

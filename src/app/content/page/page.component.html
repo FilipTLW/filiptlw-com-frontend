@@ -1,0 +1,24 @@
+@if(page) {
+  <article class="page-block">
+
+    <h1 class="page-title">{{page.title}}</h1>
+
+    @if (page.subtitle) {
+      <h2 class="page-subtitle">{{page.subtitle}}</h2>
+    }
+
+    @if (page.header) {
+      <p class="page-header">{{page.header}}</p>
+    }
+
+    @for (section of page.sections; track section) {
+      <section class="page-section">
+        <h2 class="page-section-title">{{section.title}}</h2>
+        <p class="page-section-content">{{section.content}}</p>
+      </section>
+    }
+
+    <p class="page-footer">{{page.footer}}</p>
+
+  </article>
+}
