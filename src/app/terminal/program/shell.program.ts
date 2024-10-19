@@ -94,6 +94,7 @@ export class ShellProgram extends Program {
         this.subProgram = new EchoProgram(this.terminal, subExit, this._programServiceInjector, args);
         break;
       case 'help':
+      case 'man':
         this.subProgram = new HelpProgram(this.terminal, subExit, this._programServiceInjector, args);
         break;
       case 'ezmode':

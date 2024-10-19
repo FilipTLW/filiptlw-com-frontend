@@ -25,6 +25,7 @@ export class HelpProgram extends Program {
     } else {
       switch (this.args.trim().split(' ')[0]) {
         case 'help':
+        case 'man':
           HelpProgram.printHelpMessage(this.terminal);
           break;
         case 'echo':
@@ -52,6 +53,7 @@ export class HelpProgram extends Program {
   static printHelpMessage(terminal: NgTerminal): void {
     TerminalHelper.println(terminal);
     TerminalHelper.println(terminal, `Syntax: help [COMMAND]`);
+    TerminalHelper.println(terminal, `Aliases: man`);
     TerminalHelper.println(terminal);
     TerminalHelper.println(terminal, `When no COMMAND is specified, the command returns a list of all available commands.`);
     TerminalHelper.println(terminal, `When a COMMAND is specified, the command returns help specific for COMMAND.`);
