@@ -20,7 +20,7 @@ export class HelpProgram extends Program {
       TerminalHelper.println(this.terminal, `${foreColor256(14)}profile   ${RESET}Shows you information about your profile`);
       TerminalHelper.println(this.terminal, `${foreColor256(14)}logout    ${RESET}Logs you out`);
       TerminalHelper.println(this.terminal);
-      TerminalHelper.println(this.terminal, `Use help COMMAND to get additional help specific for COMMAND.`)
+      TerminalHelper.println(this.terminal, `Use help COMMAND to get additional help specific for COMMAND.`);
       TerminalHelper.println(this.terminal);
     } else {
       switch (this.args.trim().split(' ')[0]) {

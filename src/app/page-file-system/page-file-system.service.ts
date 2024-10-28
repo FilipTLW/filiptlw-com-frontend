@@ -7,7 +7,7 @@ import {firstValueFrom, Observable, of} from 'rxjs';
 })
 export class PageFileSystemService {
 
-  root: PageFile = {
+  private root: PageFile = {
     path: '',
     type: 'static',
     children: []
@@ -34,8 +34,6 @@ export class PageFileSystemService {
         }
       ]);
     });
-    console.log(this.root);
-    this.listChildren('').then(children => console.log(children));
   }
 
   registerStaticPage(path: string) {

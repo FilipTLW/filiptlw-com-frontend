@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
 
   ezMode: boolean = false;
 
-  constructor(private _appService: AppService, private _pageFileSystemService: PageFileSystemService) {
+  constructor(private _appService: AppService) {
   }
 
   ngOnInit(): void {

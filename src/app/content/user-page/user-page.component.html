@@ -1,0 +1,7 @@
+@if (!loading) {
+  @if (page !== null) {
+    <app-page [page]="page"></app-page>
+  } @else {
+    404 Not Found
+  }
+}

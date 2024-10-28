@@ -8,7 +8,7 @@ export class EchoProgram extends Program {
     this.exit();
   }
 
-  override onData(_: string): void {}
+  override onData(_: string): void {console.log(_)}
 
   static printHelpMessage(terminal: NgTerminal): void {
     TerminalHelper.println(terminal);

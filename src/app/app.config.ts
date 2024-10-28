@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import {HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi} from '@angular/common/http';
-import {UnauthorizedInterceptor} from './utils/http-interceptor';
+import {CacheInterceptor, UnauthorizedInterceptor} from './utils/http-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +13,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: UnauthorizedInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CacheInterceptor,
       multi: true
     }
   ]

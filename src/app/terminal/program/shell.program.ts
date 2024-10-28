@@ -9,78 +9,40 @@ import {LoginProgram} from './login.program';
 import {TerminalService} from '../terminal.service';
 import {ProfileProgram} from './profile.program';
 import {LogoutProgram} from './logout.program';
+import {LSProgram} from './ls.program';
+import {convertBrowserOptions} from '@angular-devkit/build-angular/src/builders/browser-esbuild';
 
 export class ShellProgram extends Program {
   readonly _terminalService: TerminalService = this._programServiceInjector.inject(TerminalService);
 
-  buffer: string = '';
-  bufferPtr: number = 0;
-
   subProgram?: Program;
+
+  inputAcceptor: TerminalHelper.InputAcceptor = new TerminalHelper.InputAcceptor(this.terminal);
+  isRunning: boolean = true;
 
   public override initialize(): void {
     this.terminal.write(this._terminalService.getPrefix());
+    this._exit.asObservable().subscribe(() => this.isRunning = false);
+    new Promise<void>(async resolve => {
+      while (this.isRunning) {
+        const input = await this.inputAcceptor.readLine();
+        const separatorIdx: number = input.indexOf(' ');
+        const command: string = separatorIdx > 0 ? input.substring(0, separatorIdx) : input;
+        const args: string = separatorIdx > 0 ? input.substring(separatorIdx + 1) : '';
+        this.executeSubProgram(command, args).then(async () => {
+          await TerminalHelper.asyncPrint(this.terminal, this._terminalService.getPrefix());
+        });
+      }
+      resolve();
+    }).then();
   }
 
   override async onData(input: string): Promise<void> {
-    if (this.subProgram !== undefined) return;
-    switch (input) {
-      // arrow LEFT
-      case '\x1b[D':
-        if (this.terminal.underlying!.buffer.active.cursorX > this._terminalService.getRawPrefix().length) {
-          this.bufferPtr--;
-          this.terminal.write(input);
-        }
-        break;
-      // arrow RIGHT
-      case '\x1b[C':
-        if (this.terminal.underlying!.buffer.active.cursorX < this._terminalService.getRawPrefix().length + this.buffer.length) {
-          this.bufferPtr++;
-          this.terminal.write(input);
-        }
-        break;
-      // arrow DOWN
-      case '\x1b[B':
-        // TODO arrow down, history
-        break;
-      // arrow UP
-      case '\x1b[A':
-        // TODO arrow up, history
-        break;
-      // ENTER
-      case '\r':
-        TerminalHelper.println(this.terminal);
-        const separatorIdx: number = this.buffer.indexOf(' ');
-        const command: string = separatorIdx > 0 ? this.buffer.substring(0, separatorIdx) : this.buffer;
-        const args: string = separatorIdx > 0 ? this.buffer.substring(separatorIdx + 1) : '';
-        await this.executeSubProgram(command, args)
-        this.buffer = '';
-        this.bufferPtr = 0;
-        this.terminal.write(this._terminalService.getPrefix());
-        break;
-      // BACKSPACE
-      case '\u007f':
-        // check if cursor is not at the start of input
-        if (this.terminal.underlying!.buffer.active.cursorX > this._terminalService.getRawPrefix().length) {
-          this.terminal.write('\b \b'); // delete character
-          this.terminal.write(this.buffer.substring(this.bufferPtr)); // move remaining text
-          this.terminal.write('\x1b[0K'); // clear everything after the buffer
-          this.terminal.write(FunctionsUsingCSI.cursorColumn(this._terminalService.getRawPrefix().length + this.bufferPtr)); // reset cursor back to the position of bufferPtr
-          this.buffer = this.buffer.substring(0, this.bufferPtr - 1) + this.buffer.substring(this.bufferPtr); // remove the character from the buffer
-          this.bufferPtr--;
-        }
-        break;
-      default:
-        // check if character is printable
-        if (!((input.match(/[^ -~]+/g) ?? []).length > 0)) {
-          this.terminal.write(input);
-          this.terminal.write(this.buffer.substring(this.bufferPtr)); // move the text after the inserted character
-          this.terminal.write(FunctionsUsingCSI.cursorColumn(this._terminalService.getRawPrefix().length + this.bufferPtr + 2)); // reset cursor back to the position of bufferPtr
-          this.buffer = this.buffer.substring(0, this.bufferPtr) + input + this.buffer.substring(this.bufferPtr); // insert character into the buffer
-          this.bufferPtr++;
-        }
-        break;
+    if (this.subProgram !== undefined) {
+      await this.subProgram.onData(input);
+      return;
     }
+    await this.inputAcceptor.consume(input);
   }
 
   override exit(): void {}
@@ -108,6 +70,9 @@ export class ShellProgram extends Program {
         break;
       case 'logout':
         this.subProgram = new LogoutProgram(this.terminal, subExit, this._programServiceInjector, args);
+        break;
+      case 'ls':
+        this.subProgram = new LSProgram(this.terminal, subExit, this._programServiceInjector, args);
         break;
       default:
         subExit.next();

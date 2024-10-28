@@ -6,7 +6,7 @@ export abstract class Program {
   constructor(protected terminal: NgTerminal, protected _exit: Subject<void>, protected _programServiceInjector: ProgramServiceInjector, protected args: string = '') {
   }
 
-  abstract onData(input: string): void;
+  abstract onData(input: string): void | Promise<void>;
 
   public initialize(): void {}
 
