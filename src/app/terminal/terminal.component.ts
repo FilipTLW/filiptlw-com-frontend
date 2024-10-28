@@ -52,7 +52,11 @@ export class TerminalComponent implements AfterViewInit {
     });
 
     this.terminal.onData().subscribe(async (input: string) => {
-      this.cache.push(input);
+      if (input === '\x16') { // Ctrl+V (paste clipboard)
+        this.cache.push(await navigator.clipboard.readText());
+      } else {
+        this.cache.push(input);
+      }
       if (!this.dataStreaming) {
         this.dataStreaming = true;
         while (this.cache.length > 0) {
