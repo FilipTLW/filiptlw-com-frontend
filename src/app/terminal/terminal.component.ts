@@ -53,7 +53,7 @@ export class TerminalComponent implements AfterViewInit {
 
     this.terminal.onData().subscribe(async (input: string) => {
       if (input === '\x16') { // Ctrl+V (paste clipboard)
-        this.cache.push(await navigator.clipboard.readText());
+        this.cache.push(...(await navigator.clipboard.readText()).split('').reverse());
       } else {
         this.cache.push(input);
       }
